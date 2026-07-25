@@ -1,0 +1,40 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Página-1" id="zIJi8zN-fTzb8jgAlcut">
+    <mxGraphModel dx="1414" dy="777" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-15" edge="1" parent="1" source="9a6XKNZpV5MjMDVQZ8jn-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="9a6XKNZpV5MjMDVQZ8jn-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Inicio FAQ" vertex="1">
+          <mxGeometry height="80" width="120" x="180" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-16" edge="1" parent="1" source="9a6XKNZpV5MjMDVQZ8jn-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="9a6XKNZpV5MjMDVQZ8jn-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Lógica Condicional" vertex="1">
+          <mxGeometry height="80" width="120" x="380" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Sair da Tela Preta (CLI) para Web (Streamit)" vertex="1">
+          <mxGeometry height="80" width="120" x="580" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-17" edge="1" parent="1" source="9a6XKNZpV5MjMDVQZ8jn-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="9a6XKNZpV5MjMDVQZ8jn-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-10" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Conectar com o exterior (API, Open AI -Chat GPT)" vertex="1">
+          <mxGeometry height="80" width="120" x="180" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-18" edge="1" parent="1" source="9a6XKNZpV5MjMDVQZ8jn-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="9a6XKNZpV5MjMDVQZ8jn-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Entenda as Regras da IA Generativa (Tokens e GF)&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="120" x="380" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="9a6XKNZpV5MjMDVQZ8jn-14" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Fim&lt;div&gt;Projeto Chatbot SENAI&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="120" x="580" y="180" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
