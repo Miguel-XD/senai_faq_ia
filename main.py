@@ -1,5 +1,25 @@
 import streamlit as st
 from g4f.client import Client # Importando o cliente unificado de IA
+import tiktoken as tik
+
+def calcular_tokens(texto, modelo = "gpt-4o-mini"):
+    try:
+        # Puxar o codificador ofical da OpenIA
+        # configurado para o modelo
+        codificador = tik.encoding_for_model(modelo)
+    
+    except KeyError:
+        # Caso o modelo seja genérico,
+        # uso o padrão do GPT-4
+        codificador = tik.encoding_for_model("cl100k_base")
+        
+    # O método .encode() transformar o texto puro
+    # em uma lista de números (IDs dos tokens)
+    lista_de_tokens = codificador.encode(texto)
+    
+    # Retornar o tamanho dessa lista
+    # que é a quantidade extra de tokens
+    return len(lista_de_tokens)
 
 # Configuração da página web
 st.set_page_config(page_title="AI Chatbot Pro", page_icon="favicon.ico")
@@ -13,8 +33,37 @@ client = Client()
 if "mensagens" not in st.session_state:
     st.session_state.mensagens = [
         # Mensagem de sistema que dita o comportamento inicial da IA
-        {"role": "system", "content": "Você é um assistente virtual prestativo e bem-humorado criado em sala de aula do SENAI."}
+        {
+            "role": "system", "content": "Você é um assistente virtual do SENAI prestativo e bem-humorado criado em sala de aula."
+        }
     ]
+    
+# Sidebar (Barra lateral)
+with st.sidebar:
+    st.header("🖥️ Monitor da Infraestrutura")
+    st.write("Quantidade de tokens usados: ")
+    
+    # Calcular o total de tokens
+    # acumulados no histórico da sessão
+    total_tokens_prompt = sum(
+        calcular_tokens(
+                msg["content"]
+            )
+            for msg in st.session_state.mensagens            
+        )
+
+    # Exibir um card visual com a métrica
+    st.metric(
+        label="Token de Entrada (Contexto Atual)",
+        value=f"{total_tokens_prompt} tokens",
+        delta=f"+ {calcular_tokens(
+            st.session_state.mensagens[-1]["content"]
+            )} do ultimo turno"
+            
+        if len(st.session_state.mensagens) > 1 else None
+    )
+    
+    st.divider()
 
 # Renderizar as mensagens anteriores na tela (ignorando a mensagem oculta do 'system')
 for msg in st.session_state.mensagens:
