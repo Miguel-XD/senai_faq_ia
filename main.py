@@ -1,6 +1,12 @@
 import streamlit as st
 from g4f.client import Client # Importando o cliente unificado de IA
 import tiktoken as tik
+from groq import Groq
+
+# O Streamlit lê automaticamente
+# variáveis de ambiente
+# do arquivo .streamlit/secrets.toml
+GROQ_KEY = st.secrets.get("GROQ_API_KEY", None)
 
 def calcular_tokens(texto, modelo = "gpt-4o-mini"):
     try:
@@ -26,21 +32,43 @@ st.set_page_config(page_title="AI Chatbot Pro", page_icon="favicon.ico")
 st.title("🤖 Meu Chatbot com IA Generativa")
 st.write("Conectado diretamente a modelos de linguagem avançados. Pergunte o que quiser!")
 
-# Inicializando o cliente da API (O nosso 'garçom' de requisições)
-client = Client()
+
 
 # Inicializando o histórico de mensagens na memória da sessão
 if "mensagens" not in st.session_state:
     st.session_state.mensagens = [
         # Mensagem de sistema que dita o comportamento inicial da IA
         {
-            "role": "system", "content": "Você é um assistente virtual do SENAI prestativo e bem-humorado criado em sala de aula."
+            "role": "system", "content": st.secrets.get("PROMPT_IA", None)
         }
     ]
     
 # Sidebar (Barra lateral)
 with st.sidebar:
     st.header("🖥️ Monitor da Infraestrutura")
+    
+    # Seletor do modelo
+    provedor_selecionado = st.selectbox(
+        "Escolha qual IA vai responder",
+        [
+            "GPT-4o Mini (Via G4F)",
+            "Llama 3.3 (Via Groq)"        
+        ]
+    )
+    
+    st.divider()
+    
+    # Status visual do Groq
+    if provedor_selecionado == "GPT-4o Mini (Via G4F)":
+        st.success("🐦‍⬛ Conexão com a Chat-GPT ativa")
+        
+    elif provedor_selecionado == "Llama 3.3 (Via Groq)":        
+        st.success("🦙 Conexão com o Groq ativa")
+    
+    st.divider()
+    
+    st.subheader("📊 Monitor de contexto")
+    
     st.write("Quantidade de tokens usados: ")
     
     # Calcular o total de tokens
@@ -85,17 +113,31 @@ if prompt := st.chat_input("Envie uma mensagem para a IA..."):
         with st.spinner("Pensando..."):
             try:
                 # Requisição oficial de chat completions
-                resposta_api = client.chat.completions.create(
-                    model="gpt-4o-mini", # Especificando o modelo cognitivo desejado
-                    messages=st.session_state.mensagens # Enviando TODO o histórico para dar contexto
-                )
+                if provedor_selecionado == "GPT-4o Mini (Via G4F)":
+                    # Inicializando o cliente da API (O nosso 'garçom' de requisições)
+                    client = Client()
+                    # Requisição oficial de chat completions
+                    resposta_api = client.chat.completions.create(
+                        model="gpt-4o-mini", # Especificando o modelo cognitivo desejado
+                        messages=st.session_state.mensagens # Enviando TODO o histórico para dar contexto
+                    )
                 
-                # Extraindo o texto puro de dentro do payload retornado pela API
+                elif provedor_selecionado == "Llama 3.3 (Via Groq)":
+                    if not GROQ_KEY:
+                        st.error("Erro de configuração. Contate o administrador do sistema")
+                        st.stop()
+                    client_groq = Groq(api_key=GROQ_KEY)
+                    
+                    resposta_api = client_groq.chat.completions.create(
+                        model = "llama 3.3-70b-versatile",
+                        messages = st.session_state.mensagens 
+                    )
+                 # Extraindo o texto puro de dentro do payload retornado pela API
                 texto_resposta = resposta_api.choices[0].message.content
-                
+                                    
                 # Exibindo o resultado final processado pela IA na tela do usuário
                 st.markdown(texto_resposta)
-                
+                                    
                 # 3. Salvar a resposta gerada no histórico para manter o contexto na próxima pergunta
                 st.session_state.mensagens.append({"role": "assistant", "content": texto_resposta})
                 
