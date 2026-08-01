@@ -20,7 +20,7 @@ python -m venv .venv
 ## Usar o ambiente isolado
 ### Instalar Pacotes
 ```python
-pip install streamlit g4f
+pip install streamlit 
 ```
 
 ### Salvar a lista de dependências (para compartilhar o projeto)
