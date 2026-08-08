@@ -29,20 +29,26 @@ def calcular_tokens(texto, modelo = "gpt-4o-mini"):
 ## Função para ler PDF/DOCX
 def extrair_texto_de_arquivo(uploaded_file):
     if uploaded_file is None:
+
         return ""
+    
     if uploaded_file.name.endswith('.txt'):
+
         return uploaded_file.getvalue().decode("utf-8")
     
     ## Fazer o if com .docx 
     elif uploaded_file.name.endswith('.docx'):
         doc = docx.Document(uploaded_file)
+
         return "\n".join([p.text for p in doc.paragraphs if p.text])
     
     ## Fazer o if com .pdf
     
     elif uploaded_file.name.endswith('.pdf'):
         leitor_pdf = pypdf.PdfReader(uploaded_file)
+
         textoextraido = ""
+        
         for pagina in leitor_pdf.pages:
             t = pagina.extract_text()
             if t:
@@ -70,31 +76,43 @@ def gerar_template_word_bytes():
     return buffer
     
 # Função que vai gerar a resposta do bot
-def gerar_resposta_ia(provedor, mensagens, groq_key = None, temperatura = 0.2):
-    inicio = time.time()
+def gerar_resposta_ia(provedor, mensagens, api_keys, temperatura = 0.2):
+    inicio = time.time()    
     
     if provedor == "GPT-4o Mini (Via G4F)":
-        client = Client()
+        g4f_key = api_keys.get("G4F", None)
+        if not api_keys.get("G4F"): raise ValueError( "G4F_API_KEY não configurada no secrets.toml" )
+
+        client = Client(api_key=g4f_key)
+
         resposta = client.chat.completions.create(
             model = MODELO_DEFAULT_G4F,
             messages = mensagens,
             temperature = temperatura
         )
+
         texto = resposta.choices[0].message.content
     
     elif provedor == "Llama 3.3 (Via Groq)":
-        if not groq_key:
+
+        groq_key = api_keys.get("GROQ", None)
+
+        if not api_keys.get("GROQ"):
             raise ValueError("GROQ_API_KEY não configurada no secrets.toml")
         
-        client_groq = Groq(api_key = groq_key)
+        client_groq = Groq(api_key=groq_key)
+
         resposta = client_groq.chat.completions.create(
             model = MODELO_DEFAULT_GROQ,
             messages = mensagens,
             temperature = temperatura
         )
-    
+
+        texto = resposta.choices[0].message.content
+
     else:
         ValueError("Provedor inválido.")
         
     tempo = round(time.time() - inicio, 2)
+    
     return texto, tempo
