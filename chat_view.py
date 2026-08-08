@@ -1,6 +1,9 @@
 import streamlit as st
+import logging
 from config import PROMPT_SISTEMA_SENAI
 from services import calcular_tokens, gerar_resposta_ia
+
+logger = logging.getLogger(__name__)
 
 API_KEYS = {
     "GROQ": st.secrets.get("GROQ_API_KEY", None),
@@ -92,4 +95,6 @@ if prompt := st.chat_input("Faça uma pergunta para a IA ..."):
                 st.rerun()
                 
             except Exception as e:
-                st.error(f"Erro ao conectar com a IA: {e}")
+                st.error(f"Erro ao conectar com a IA: Tente novamente mais tarde")
+                logging.basicConfig(level=logging.INFO)
+                logger.error(e)
